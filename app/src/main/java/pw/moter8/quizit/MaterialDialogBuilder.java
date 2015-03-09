@@ -22,69 +22,74 @@ public class MaterialDialogBuilder {
 
 
     public static MaterialDialogBuilder build(Context context, DialogType dialogType) {
+
+        int title;
+        int message;
+
         switch (dialogType) {
             case GENERIC_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_generic_title),
-                        context.getString(R.string.error_generic_message));
+                title = R.string.error_generic_title;
+                message = R.string.error_generic_message;
+                break;
             }
             case NO_FRIENDS_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_generic_title),
-                        context.getString(R.string.error_no_friends_added));
+                title = R.string.error_generic_title;
+                message = R.string.error_no_friends_added;
+                break;
             }
             case NETWORK_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_generic_title),
-                        context.getString(R.string.error_network_unavailable));
+                title = R.string.error_generic_title;
+                message = R.string.error_network_unavailable;
+                break;
             }
             case NETWORK_UNAVAIL_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_generic_title),
-                        context.getString(R.string.error_network_unavailable));
+                title = R.string.error_generic_title;
+                message = R.string.error_network_unavailable;
+                break;
             }
             case INPUT_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_invalid_input_title),
-                        context.getString(R.string.error_invalid_input_generic));
+                title = R.string.error_invalid_input_title;
+                message = R.string.error_invalid_input_generic;
+                break;
             }
             case INPUT_USERNAME_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_invalid_input_title),
-                        context.getString(R.string.error_invalid_input_username));
+                title = R.string.error_invalid_input_title;
+                message = R.string.error_invalid_input_username;
+                break;
             }
             case INPUT_PW_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_invalid_input_title),
-                        context.getString(R.string.error_invalid_input_password));
+                title = R.string.error_invalid_input_title;
+                message = R.string.error_invalid_input_password;
+                break;
             }
             case INPUT_EMAIL_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_invalid_input_title),
-                        context.getString(R.string.error_invalid_input_email));
+                title = R.string.error_invalid_input_title;
+                message = R.string.error_invalid_input_email;
+                break;
             }
             case CREATING_USER_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_generic_title),
-                        context.getString(R.string.error_creating_user));
+                title = R.string.error_generic_title;
+                message = R.string.error_creating_user;
+                break;
             }
             case LOGIN_ERR: {
-                return new MaterialDialogBuilder(context,
-                        context.getString(R.string.error_generic_title),
-                        context.getString(R.string.error_generic_message));
+                title = R.string.error_generic_title;
+                message = R.string.error_generic_message;
+                break;
+            }
+            default: {
+                title = R.string.error_generic_title;
+                message = R.string.error_generic_message;
             }
             // more cases as the need for them comes
-
         }
-        return new MaterialDialogBuilder(context,
-                "Easter Egg",
-                "You discovered a Secret! May the Dank be with you.");
+        return new MaterialDialogBuilder(context, context.getString(title), context.getString(message));
     }
 
 
     // Used to specify all possible Strings
-    public static MaterialDialogBuilder buildSpecific(Context context, String title, String content, String positiveText) {
-        return new MaterialDialogBuilder(context, title, content, positiveText);
+    public static MaterialDialogBuilder buildSpecific(Context context, String title, String content, String positiveText, MaterialDialog.ButtonCallback buttonCallback) {
+        return new MaterialDialogBuilder(context, title, content, positiveText, buttonCallback);
     }
 
     // Used to specify title and content Strings
@@ -97,12 +102,13 @@ public class MaterialDialogBuilder {
     }
 
 
-    // Creates the Dialog
-    private MaterialDialogBuilder(Context context, String title, String content, String positiveText) {
+    // Creates the Dialog with specific string and callback
+    private MaterialDialogBuilder(Context context, String title, String content, String positiveText, MaterialDialog.ButtonCallback buttonCallback) {
         new MaterialDialog.Builder(context)
                 .title(title)
                 .content(content)
                 .positiveText(positiveText)
+                .callback(buttonCallback)
                 .show();
     }
 

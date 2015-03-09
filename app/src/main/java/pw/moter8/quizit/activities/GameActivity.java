@@ -38,6 +38,7 @@ public class GameActivity extends ActionBarActivity {
     protected String correctAnswer = "";
     private CountDownTimer mCountDownTimer;
     private ParseObject question;
+    private int questionCategory;
 
     @InjectView(R.id.loadingLabel) TextView mLoadingLabel;
     @InjectView(R.id.questionLabel) TextView mQuestionLabel;
@@ -45,9 +46,10 @@ public class GameActivity extends ActionBarActivity {
     @InjectView(R.id.button1) Button mButton1;
     @InjectView(R.id.button2) Button mButton2;
     @InjectView(R.id.button3) Button mButton3;
-    @InjectView(R.id.buttonJoker) Button mButtonFiftyFity;
+    @InjectView(R.id.buttonFiftyFifty) Button mButtonFiftyFity;
+    @InjectView(R.id.buttonBonusTime) Button mButtonBonusTime;
     @InjectView(R.id.progressBar) ProgressBar mProgressBar;
-    @InjectView(R.id.textCountdown) TextView mTextCoundown;
+    @InjectView(R.id.textCountdown) TextView mTimeCoundown;
     @InjectView(R.id.textStats) TextView mTextStats;
 
     @Override
@@ -57,7 +59,7 @@ public class GameActivity extends ActionBarActivity {
         ButterKnife.inject(this);
         Prefs.initPrefs(this);
 
-        final int questionCategory = 0;
+        questionCategory = getIntent().getIntExtra("questionCategory", 0);
 
         mProgressBar.setVisibility(View.VISIBLE);
         ParseQuery<ParseObject> questionQuery = new ParseQuery<ParseObject>(SingleCategory.CLASS_SINGLE_CATEGORY[questionCategory]);
@@ -67,8 +69,9 @@ public class GameActivity extends ActionBarActivity {
                 mProgressBar.setVisibility(View.INVISIBLE);
                 if (e == null) {
                     prepareJokerButtons(mButtonFiftyFity, JokerType.FIFTY_FITY);
+                    prepareJokerButtons(mButtonBonusTime, JokerType.BONUS_TIME);
                     mCountDownTimer.start();
-                    mTextCoundown.setVisibility(View.VISIBLE);
+                    mTimeCoundown.setVisibility(View.VISIBLE);
 
                     // select a random question Object and use its stuff to feed stuff
                     Random randomGen = new Random();
@@ -105,16 +108,21 @@ public class GameActivity extends ActionBarActivity {
         newAnswerOnClickListener(mButton3);
 
         newJokerOnClickListener(mButtonFiftyFity, JokerType.FIFTY_FITY);
+        newJokerOnClickListener(mButtonBonusTime, JokerType.BONUS_TIME);
 
-        mCountDownTimer = new CountDownTimer(10300, 1000) {
+        mCountDownTimer = buildCountDownTimer(10300, 1000);
+    }
+
+    private CountDownTimer buildCountDownTimer(long millisInFuture, long countDownInterval) {
+        return new CountDownTimer(millisInFuture, countDownInterval) {
             @Override
             public void onTick(long millisUntilFinished) {
-                mTextCoundown.setText(Math.round(millisUntilFinished / 1000) + " seconds");
+                mTimeCoundown.setText(Math.round(millisUntilFinished / 1000) + " seconds");
             }
 
             @Override
             public void onFinish() {
-                mTextCoundown.setText(0 + " seconds");
+                mTimeCoundown.setText(0 + " seconds");
                 Snackbar.with(getApplicationContext())
                         .text("You were too slow!")
                         .show(GameActivity.this);
@@ -148,9 +156,29 @@ public class GameActivity extends ActionBarActivity {
 
     private void prepareJokerButtons(final Button button, JokerType jokerType) {
         Prefs.putInt("fifty-fifty", 1);
-        if (Prefs.getInt("fifty-fifty", 0) == 0) {
-            mButtonFiftyFity.setEnabled(false);
-        } else mButtonFiftyFity.setEnabled(true);
+        Prefs.putInt("bonus-time", 1);
+
+        switch (jokerType) {
+            case FIFTY_FITY: {
+                if (Prefs.getInt("fifty-fifty", 0) == 0) {
+                    button.setEnabled(false);
+                } else button.setEnabled(true);
+                break;
+            }
+            case BONUS_TIME: {
+                if (Prefs.getInt("bonus-time", 0) == 0) {
+                    button.setEnabled(false);
+                } else button.setEnabled(true);
+                break;
+            }
+            case BONUS_POINTS: {
+                //TODO: Figure out what this joker will do
+                if (Prefs.getInt("bonus-time", 0) == 0) {
+                    button.setEnabled(false);
+                } else button.setEnabled(true);
+                break;
+            }
+        }
     }
 
 
@@ -171,9 +199,10 @@ public class GameActivity extends ActionBarActivity {
                             .text("Answer is not Correct!")
                             .show(GameActivity.this);
                     mButtonFiftyFity.setEnabled(false);
+                    mButtonBonusTime.setEnabled(false);
                 }
                 mCountDownTimer.cancel();
-                mTextCoundown.setVisibility(View.INVISIBLE);
+                mTimeCoundown.setVisibility(View.INVISIBLE);
             }
         });
     }
@@ -196,16 +225,18 @@ public class GameActivity extends ActionBarActivity {
                                 n++;
                             }
                         }
-                        button.setEnabled(false);
                         break;
                         }
                     case BONUS_TIME:{
+                        mCountDownTimer = buildCountDownTimer(Integer.valueOf(mTimeCoundown.getText().toString()), 1000);
                         break;
                     }
                     case BONUS_POINTS:{
                         break;
                     }
                 }
+                // possibly send that joker jokerType has been used
+                button.setEnabled(false); // prob all jokers are 1-time-use only
             }
         });
     }

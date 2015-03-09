@@ -4,9 +4,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-import com.rengwuxian.materialedittext.MaterialEditText;
-
-
 public class AppHelper {
 
     public static boolean isNetworkAvail(Context context) {

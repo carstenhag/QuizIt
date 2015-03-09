@@ -44,7 +44,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="36dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <Button
             android:id="@+id/button0"
@@ -74,7 +75,8 @@
         android:layout_marginLeft="16dp"
         android:layout_marginRight="16dp"
         android:layout_marginTop="36dp"
-        android:orientation="horizontal">
+        android:orientation="horizontal"
+        android:gravity="center">
 
         <Button
             android:id="@+id/button2"
@@ -92,25 +94,43 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="8dp"
             android:text=""
-            android:visibility="invisible"
-            />
+            android:visibility="invisible" />
     </LinearLayout>
 
-    <Button
-        android:id="@+id/buttonJoker"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/linearLayout1"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="24dp"
-        android:enabled="false"
-        android:text="Joker"/>
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="36dp"
+        android:orientation="horizontal"
+        android:gravity="center">
+
+        <Button
+            android:id="@+id/buttonFiftyFifty"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:layout_marginRight="8dp"
+            android:text="50-50" />
+
+        <Button
+            android:id="@+id/buttonBonusTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:enabled="false"
+            android:layout_marginLeft="8dp"
+            android:text="Bonus Time" />
+    </LinearLayout>
 
     <TextView
         android:id="@+id/textCountdown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/buttonJoker"
+        android:layout_below="@+id/linearLayout2"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="36dp"
         android:text=""
@@ -121,11 +141,11 @@
         android:id="@+id/textStats"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/textCountdown"
+        android:layout_centerHorizontal="true"
         android:layout_marginTop="16dp"
         android:text=""
         android:textAppearance="?android:attr/textAppearanceMedium"
-        android:visibility="invisible"
-        android:layout_below="@+id/textCountdown"
-        android:layout_centerHorizontal="true"/>
+        android:visibility="invisible"/>
 
 </RelativeLayout>

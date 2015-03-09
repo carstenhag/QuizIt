@@ -95,6 +95,7 @@ public class MainActivity extends ActionBarActivity {
             }
             case SINGLE_CATEGORY: {
                 intent = new Intent(MainActivity.this, GameActivity.class);
+                intent.putExtra("questionCategory", 0);
                 break;
             }
             case MULTIPLE_CATEGORY: {
