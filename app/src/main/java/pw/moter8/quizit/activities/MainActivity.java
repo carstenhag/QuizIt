@@ -92,6 +92,7 @@ public class MainActivity extends ActionBarActivity {
         switch (gameMode) {
             default: {
                 intent = new Intent();
+                break;
             }
             case SINGLE_CATEGORY: {
                 intent = new Intent(MainActivity.this, GameActivity.class);
